@@ -1,9 +1,9 @@
 use itertools::Itertools;
-use tui::buffer::Buffer;
-use tui::layout::{Constraint, Direction, Layout, Rect};
-use tui::text::Span;
-use tui::widgets::canvas::{Canvas, Line, Rectangle};
-use tui::widgets::{Block, Borders, StatefulWidget, Widget};
+use ratatui::buffer::Buffer;
+use ratatui::layout::{Constraint, Direction, Layout, Rect};
+use ratatui::text::Span;
+use ratatui::widgets::canvas::{Canvas, Line, Rectangle};
+use ratatui::widgets::{Block, Borders, StatefulWidget, Widget};
 
 use crate::common::{Price, TimeFrame};
 use crate::draw::{add_padding, PaddingDirection};
@@ -26,7 +26,7 @@ pub struct PricesCandlestickChart<'a> {
     pub show_x_labels: bool,
 }
 
-impl<'a> StatefulWidget for PricesCandlestickChart<'a> {
+impl StatefulWidget for PricesCandlestickChart<'_> {
     type State = StockState;
 
     fn render(self, mut area: Rect, buf: &mut Buffer, state: &mut Self::State) {
@@ -57,17 +57,18 @@ impl<'a> StatefulWidget for PricesCandlestickChart<'a> {
 
         // x_layout[0] - chart + y labels
         // x_layout[1] - (x labels)
-        let x_layout = Layout::default()
+        let x_layout: Vec<Rect> = Layout::default()
             .constraints(if self.show_x_labels {
                 &[Constraint::Min(0), Constraint::Length(1)][..]
             } else {
                 &[Constraint::Min(0)][..]
             })
-            .split(area);
+            .split(area)
+            .to_vec();
 
         // layout[0] - Y lables
         // layout[1] - chart
-        let mut layout = Layout::default()
+        let mut layout: Vec<Rect> = Layout::default()
             .direction(Direction::Horizontal)
             .constraints([
                 Constraint::Length(if !self.loaded {
@@ -83,7 +84,8 @@ impl<'a> StatefulWidget for PricesCandlestickChart<'a> {
                 }),
                 Constraint::Min(0),
             ])
-            .split(x_layout[0]);
+            .split(x_layout[0])
+            .to_vec();
 
         // Fix for border render
         layout[1].x = layout[1].x.saturating_sub(1);
@@ -148,7 +150,7 @@ impl<'a> StatefulWidget for PricesCandlestickChart<'a> {
                     return None;
                 }
 
-                let open = prices.get(0).unwrap().open;
+                let open = prices.first().unwrap().open;
                 let close = prices.iter().last().unwrap().close;
                 let high = prices
                     .iter()

@@ -1,7 +1,7 @@
-use tui::buffer::Buffer;
-use tui::layout::Rect;
-use tui::symbols::Marker;
-use tui::widgets::{Axis, Block, Borders, Chart, Dataset, GraphType, StatefulWidget, Widget};
+use ratatui::buffer::Buffer;
+use ratatui::layout::Rect;
+use ratatui::symbols::Marker;
+use ratatui::widgets::{Axis, Block, Borders, Chart, Dataset, GraphType, StatefulWidget, Widget};
 
 use crate::common::{
     cast_as_dataset, cast_historical_as_price, zeros_as_pre, Price, TimeFrame, TradingPeriod,
@@ -19,7 +19,7 @@ pub struct PricesLineChart<'a> {
     pub data: &'a [Price],
 }
 
-impl<'a> StatefulWidget for PricesLineChart<'a> {
+impl StatefulWidget for PricesLineChart<'_> {
     type State = StockState;
 
     fn render(self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {

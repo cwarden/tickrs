@@ -1,8 +1,8 @@
 use itertools::Itertools;
-use tui::buffer::Buffer;
-use tui::layout::Rect;
-use tui::symbols::bar;
-use tui::widgets::{BarChart, Block, Borders, StatefulWidget, Widget};
+use ratatui::buffer::Buffer;
+use ratatui::layout::Rect;
+use ratatui::symbols::bar;
+use ratatui::widgets::{BarChart, Block, Borders, StatefulWidget, Widget};
 
 use crate::common::{Price, TimeFrame};
 use crate::theme::style;
@@ -15,7 +15,7 @@ pub struct VolumeBarChart<'a> {
     pub show_x_labels: bool,
 }
 
-impl<'a> StatefulWidget for VolumeBarChart<'a> {
+impl StatefulWidget for VolumeBarChart<'_> {
     type State = StockState;
 
     fn render(self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {

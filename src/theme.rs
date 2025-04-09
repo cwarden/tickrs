@@ -1,5 +1,5 @@
+use ratatui::style::{Color, Style};
 use serde::Deserialize;
-use tui::style::{Color, Style};
 
 use self::de::deserialize_option_color_hex_string;
 use crate::THEME;
@@ -83,7 +83,7 @@ mod de {
     {
         struct ColorVisitor;
 
-        impl<'de> Visitor<'de> for ColorVisitor {
+        impl Visitor<'_> for ColorVisitor {
             type Value = Option<Color>;
 
             fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
